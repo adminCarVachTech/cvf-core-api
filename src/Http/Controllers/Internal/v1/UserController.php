@@ -150,6 +150,8 @@ class UserController extends FleetbaseController
         $data  = $request->input('user');
         $email = strtolower($data['email']);
 
+        dd("data: ".$request->all())
+
         // set company
         $data['company_uuid'] = session('company');
         $data['status']       = 'pending'; // pending acceptance
