@@ -29,6 +29,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
+use Fleetbase\Models\VerificationCode;
+
 class UserController extends FleetbaseController
 {
     /**
@@ -150,7 +152,6 @@ class UserController extends FleetbaseController
         $data  = $request->input('user');
         $email = strtolower($data['email']);
 
-        dd("data: ".$request->all())
 
         // set company
         $data['company_uuid'] = session('company');
@@ -219,6 +220,7 @@ class UserController extends FleetbaseController
             'reason'          => 'join_company',
         ]);
 
+        VerificationCode::generateEmailVerificationFor($user);
         // notify user
         $user->notify(new UserInvited($invitation));
 
