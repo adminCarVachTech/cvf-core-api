@@ -14,7 +14,7 @@ return [
         ]
     ],
     'console' => [
-        'host' => env('CONSOLE_HOST', 'fleetbase.io'),
+        'host' => env('CONSOLE_HOST', 'localhost:4200'),
         'subdomain' => env('CONSOLE_SUBDOMAIN'),
         'secure' => env('CONSOLE_SECURE', !app()->environment(['development', 'local']))
     ],
@@ -28,7 +28,11 @@ return [
         'sandbox' => env('SANDBOX_DB_CONNECTION', 'sandbox')
     ],
     'branding' => [
-        'logo_url' => 'https://www.carvach.com/carvachLogo.svg',
-        'icon_url' => 'https://www.carvach.com/carvachLogo.svg'
+        'logo_url' => 'https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/fleetbase-logo.png',
+        //'logo_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/73x73%20R.png',
+        //'logo_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/carvachLogo-final.png',
+        //'icon_url' => 'https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/fleetbase-icon.png'
+        'icon_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/144x144%20R.png'
+        //'icon_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/final%20full%20logo.png'
     ]
 ];
