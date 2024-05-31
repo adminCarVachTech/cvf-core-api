@@ -14,7 +14,7 @@ return [
         ]
     ],
     'console' => [
-        'host' => env('CONSOLE_HOST', 'localhost:4200'),
+        'host' => env('CONSOLE_HOST', 'fleetbase.eastus.cloudapp.azure.com'),
         'subdomain' => env('CONSOLE_SUBDOMAIN'),
         'secure' => env('CONSOLE_SECURE', !app()->environment(['development', 'local']))
     ],
