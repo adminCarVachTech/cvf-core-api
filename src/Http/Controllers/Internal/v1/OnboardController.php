@@ -9,7 +9,6 @@ use Fleetbase\Models\Company;
 use Fleetbase\Models\CompanyUser;
 use Fleetbase\Models\User;
 use Fleetbase\Models\VerificationCode;
-use Fleetbase\Support\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -76,11 +75,11 @@ class OnboardController extends Controller
         $user->assignCompany($company);
 
         // create company user
-        CompanyUser::create([
+        /*CompanyUser::create([
             'user_uuid'    => $user->uuid,
             'company_uuid' => $company->uuid,
             'status'       => 'active',
-        ]);
+        ]);*/
 
         // send account created event
         event(new AccountCreated($user, $company));
@@ -94,35 +93,6 @@ class OnboardController extends Controller
             'token'            => $isAdmin ? $token->plainTextToken : null,
             'skipVerification' => $isAdmin,
         ]);
-    }
-
-    private function _applyUserInfo($attributes, $request)
-    {
-        // Lookup user default details
-        try {
-            $info = Http::lookupIp($request);
-        } catch (\Exception $e) {
-        }
-
-        if ($info) {
-            $attributes['country']    = data_get($info, 'country_code');
-            $attributes['ip_address'] = data_get($info, 'ip', $request->ip());
-            $tzInfo                   = data_get($info, 'time_zone.name');
-            if ($tzInfo) {
-                $attributes['timezone'] = $tzInfo;
-            }
-            $attributes['meta'] = [
-                'areacode'   => data_get($info, 'calling_code'),
-                'currency'   => data_get($info, 'currency.code'),
-                'language'   => data_get($info, 'languages.0'),
-                'country'    => data_get($info, 'country_name'),
-                'contintent' => data_get($info, 'continent_name'),
-                'latitude'   => data_get($info, 'latitude'),
-                'longitude'  => data_get($info, 'longitude'),
-            ];
-        }
-
-        return $attributes;
     }
 
     /**
@@ -140,7 +110,7 @@ class OnboardController extends Controller
 
         // Get user using id
         $user = User::where('uuid', $decodedId)->first();
-        if ($user->email !== $email) {
+        if ($user && $user->email !== $email) {
             return response()->error('Email address provided does not match for this verification session.');
         }
 

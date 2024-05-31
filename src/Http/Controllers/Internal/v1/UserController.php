@@ -2,6 +2,10 @@
 
 namespace Fleetbase\Http\Controllers\Internal\v1;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Fleetbase\Mail\InvitationMail;
+
 use Fleetbase\Events\UserRemovedFromCompany;
 use Fleetbase\Exceptions\FleetbaseRequestValidationException;
 use Fleetbase\Exports\UserExport;
@@ -29,8 +33,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
-use Fleetbase\Models\VerificationCode;
-
 class UserController extends FleetbaseController
 {
     /**
@@ -49,6 +51,20 @@ class UserController extends FleetbaseController
     {
         // @todo Add user creation validation
         try {
+
+            $email = $request->input('user.email');
+            $companyUuid = session('company');
+
+            // Check if the user already exists in the current company
+            $existingUser = User::where('email', $email)
+                                ->where('company_uuid', $companyUuid)
+                                ->first();
+
+            if ($existingUser) {
+                //return response()->json(['error' => 'User already exists in the current company.'], 409);
+                throw new FleetbaseRequestValidationException(['email' => 'User already exists in the current company.'],'User already exists in this organization');
+            }
+
             $record = $this->model->createRecordFromRequest($request, function (&$request, &$input) {
                 // Get user properties
                 $name        = $request->input('user.name');
@@ -74,6 +90,29 @@ class UserController extends FleetbaseController
                 $user->assignCompany($company);
             });
 
+            $invitation = Invite::create([
+            'company_uuid'    => session('record'),
+            'created_by_uuid' => session('user'),
+            'subject_uuid'    => $record->uuid,
+            'subject_type'    => Utils::getMutationType($record),
+            'protocol'        => 'email',
+            'recipients'      => [$record->email],
+            'reason'          => 'join_company',
+        ]);
+
+        // notify user
+        //$user->notify(new UserInvited($invitation));
+
+        //Log::info("code: ".$invitation);
+        $EmailTo = $invitation->recipients[0];
+        $company_name = $record->company_name;
+        $user_name = $record->name;
+        $url = Utils::consoleUrl('join/org/' . $invitation->uri);
+        $Code = $invitation->code;
+
+        $subject = "You're Invited to Join ".$company_name."'s Community ";
+
+        Mail::to($EmailTo)->send(new InvitationMail($company_name,$subject,$user_name,$url,$Code));
             return ['user' => new $this->resource($record)];
         } catch (\Exception $e) {
             return response()->error($e->getMessage());
@@ -152,7 +191,6 @@ class UserController extends FleetbaseController
         $data  = $request->input('user');
         $email = strtolower($data['email']);
 
-
         // set company
         $data['company_uuid'] = session('company');
         $data['status']       = 'pending'; // pending acceptance
@@ -220,9 +258,20 @@ class UserController extends FleetbaseController
             'reason'          => 'join_company',
         ]);
 
-        VerificationCode::generateEmailVerificationFor($user);
         // notify user
-        $user->notify(new UserInvited($invitation));
+        //$user->notify(new UserInvited($invitation));
+
+        //Log::info("code: ".$invitation);
+        $EmailTo = $invitation->recipients[0];
+        $company_name = $company->name;
+        $user_name = $user->name;
+        $URI = $invitation->uri;
+        $url = Utils::consoleUrl('join/org/' . $invitation->uri);
+        $Code = $invitation->code;
+
+        $subject = "You're Invited to Join ".$company_name."'s Community ";
+
+        Mail::to($EmailTo)->send(new InvitationMail($company_name,$subject,$user_name,$url,$Code));
 
         return response()->json(['status' => 'ok']);
     }
@@ -235,6 +284,7 @@ class UserController extends FleetbaseController
     public function acceptCompanyInvite(AcceptCompanyInvite $request)
     {
         $invite = Invite::where('code', $request->input('code'))->with(['subject'])->first();
+
 
         // get invited email
         $email = Arr::first($invite->recipients);
@@ -259,21 +309,29 @@ class UserController extends FleetbaseController
 
         // determine if user needs to set password (when status pending)
         $isPending = $needsPassword = $user->status === 'pending';
-
         // add user to company
-        CompanyUser::create([
+       /* CompanyUser::create([
             'user_uuid'    => $user->uuid,
             'company_uuid' => $company->uuid,
-        ]);
+        ]);*/
 
         // activate user
         if ($isPending) {
             $user->update(['status' => 'active', 'email_verified_at' => Carbon::now()]);
         }
-
+        
         // create authentication token for user
         $token = $user->createToken($invite->code);
 
+        $companyUser = CompanyUser::where('user_uuid', $user->uuid)
+                              ->where('company_uuid', $user->company_uuid)
+                              ->first();
+        
+        if ($companyUser) {
+        // activate company user
+        $companyUser->update(['status' => 'active']);
+        }
+    
         // Notify company that user has accepted their invite
         NotificationRegistry::notify(UserAcceptedCompanyInvite::class, $company, $user);
 
@@ -436,12 +494,13 @@ class UserController extends FleetbaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public static function export(ExportRequest $request)
+    public function export(ExportRequest $request)
     {
-        $format   = $request->input('format', 'xlsx');
-        $fileName = trim(Str::slug('users-' . date('Y-m-d-H:i')) . '.' . $format);
+        $format       = $request->input('format', 'xlsx');
+        $selections   = $request->array('selections');
+        $fileName     = trim(Str::slug('users-' . date('Y-m-d-H:i')) . '.' . $format);
 
-        return Excel::download(new UserExport(), $fileName);
+        return Excel::download(new UserExport($selections), $fileName);
     }
 
     /**
