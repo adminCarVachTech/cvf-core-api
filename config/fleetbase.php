@@ -27,12 +27,17 @@ return [
         'db' => env('DB_CONNECTION', 'mysql'),
         'sandbox' => env('SANDBOX_DB_CONNECTION', 'sandbox')
     ],
-    'branding' => [
+    /*'branding' => [
         'logo_url' => 'https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/fleetbase-logo.png',
         //'logo_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/73x73%20R.png',
         //'logo_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/carvachLogo-final.png',
         //'icon_url' => 'https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/fleetbase-icon.png'
         'icon_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/144x144%20R.png'
         //'icon_url' => 'https://raw.githubusercontent.com/Rohit0814/test/main/final%20full%20logo.png'
+    ]*/
+
+    'branding' => [
+        'logo_url' => 'https://www.carvach.com/carvachLogo.svg',
+        'icon_url' => 'https://www.carvach.com/carvachLogo.svg'
     ]
 ];
