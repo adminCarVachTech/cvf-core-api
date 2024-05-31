@@ -6,7 +6,7 @@ We received a request to reset your password for your {{$company_name}} fleetbas
 
 This link will expire in 15 minutes for your security.<br/>
 Reset Code: {{$Code}}<br/>
-If you have any questions or need further assistance, please do not hesitate to contact our support team at demo@carvach.com.
+If you have any questions or need further assistance, please do not hesitate to contact our support team at info@carvach.com.
 
 Thank you for using {{$company_name}} fleetbase
 
