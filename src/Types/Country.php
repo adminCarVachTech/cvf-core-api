@@ -126,6 +126,7 @@ class Country implements \JsonSerializable
                 $key = Arr::first(array_keys($key));
             }
 
+<<<<<<< HEAD
             if (!is_string($key)) {
                 continue;
             }
@@ -138,6 +139,9 @@ class Country implements \JsonSerializable
             if (isset($this->{$key})) {
                 $result[$as] = $this->{$key};
             }
+=======
+            $result[$as] = strpos($key, '.') > 0 ? Utils::get($this, $key) : $this->{$key};
+>>>>>>> origin/main
         }
 
         return $result;
@@ -243,7 +247,11 @@ class Country implements \JsonSerializable
                     strtolower($country->getCode()) === $query,
                     strtolower($country->getCca2()) === $query,
                     Str::contains(strtolower($country->getAbbrev()), $query),
+<<<<<<< HEAD
                     // Str::contains(strtolower($country->getName()), $query),
+=======
+                    Str::contains(strtolower($country->getName()), $query),
+>>>>>>> origin/main
                 ];
 
                 return count(array_filter($matches));

@@ -32,6 +32,7 @@ trait Insertable
             if (method_exists($model, 'onRowInsert')) {
                 $rows[$i] = static::onRowInsert($rows[$i]);
             }
+<<<<<<< HEAD
 
             // remove invalid keys
             $keys = array_keys($rows[$i]);
@@ -50,5 +51,10 @@ trait Insertable
         }
 
         return $result;
+=======
+        }
+
+        return static::insert($rows);
+>>>>>>> origin/main
     }
 }

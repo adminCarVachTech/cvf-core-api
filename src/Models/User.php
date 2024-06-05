@@ -776,6 +776,7 @@ class User extends Authenticatable
     }
 
     /**
+<<<<<<< HEAD
      * Create a new User instance with enriched attributes from the request.
      *
      * This static method constructs a new User object using information obtained from
@@ -795,6 +796,8 @@ class User extends Authenticatable
     }
 
     /**
+=======
+>>>>>>> origin/main
      * Sets user information from the request on the current User model instance.
      *
      * This method fetches user information based on the request data (IP address, timezone)
@@ -823,6 +826,7 @@ class User extends Authenticatable
         return $this;
     }
 
+<<<<<<< HEAD
     /**
      * Retrieve the last seen timestamp of the user.
      *
@@ -832,11 +836,14 @@ class User extends Authenticatable
      *
      * @return \Carbon\Carbon|null returns the Carbon instance for the last seen timestamp or null if not set
      */
+=======
+>>>>>>> origin/main
     public function getLastSeenAtAttribute()
     {
         return $this->lastSeenAt();
     }
 
+<<<<<<< HEAD
     /**
      * Check if the user is currently online.
      *
@@ -846,6 +853,8 @@ class User extends Authenticatable
      *
      * @return bool returns true if the user is online, otherwise false
      */
+=======
+>>>>>>> origin/main
     public function getIsOnlineAttribute()
     {
         return $this->isOnline();

@@ -703,12 +703,22 @@ class Utils
      *
      * @param float  $amount   amount to format
      * @param string $currency the currency to format into
+<<<<<<< HEAD
      *
      * @return string
      */
     public static function moneyFormat($amount, $currency = 'USD')
     {
         $amount = static::numbersOnly($amount);
+=======
+     * @param bool   $cents    whether if amount is in cents, this will auto divide by 100
+     *
+     * @return string
+     */
+    public static function moneyFormat($amount, $currency = 'USD', $cents = true)
+    {
+        $amount = $cents === true ? static::numbersOnly($amount) / 100 : $amount;
+>>>>>>> origin/main
         $money  = new \Cknow\Money\Money($amount, $currency);
 
         return $money->format();

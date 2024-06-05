@@ -74,6 +74,7 @@ class VerificationCode extends Model
         return $this->morphTo(__FUNCTION__, 'subject_type', 'subject_uuid');
     }
 
+<<<<<<< HEAD
     /**
      * Generates a verification code object for the specified subject and context.
      * This method can optionally save the generated verification code to the database.
@@ -84,6 +85,9 @@ class VerificationCode extends Model
      *
      * @return static returns an instance of the verification code with optional subject and purpose set
      */
+=======
+    /** static method to generate for a subject on the fly */
+>>>>>>> origin/main
     public static function generateFor($subject = null, $for = 'general_verification', $save = true)
     {
         $verifyCode      = new static();
@@ -100,6 +104,7 @@ class VerificationCode extends Model
         return $verifyCode;
     }
 
+<<<<<<< HEAD
     /**
      * Generates and sends an email verification code for a specified subject. This method configures and sends an email
      * containing the verification code.
@@ -113,6 +118,9 @@ class VerificationCode extends Model
      *
      * @throws \Exception throws an exception if the email cannot be sent
      */
+=======
+    /** static method to generate code for email verification */
+>>>>>>> origin/main
     public static function generateEmailVerificationFor($subject, $for = 'email_verification', array $options = [])
     {
         $expireAfter                  = data_get($options, 'expireAfter');
@@ -151,6 +159,7 @@ class VerificationCode extends Model
         return $verificationCode;
     }
 
+<<<<<<< HEAD
     /**
      * Generates and sends an SMS verification code for a specified subject. This method handles the creation and dispatch
      * of an SMS containing the verification code.
@@ -164,6 +173,9 @@ class VerificationCode extends Model
      *
      * @throws \Exception throws an exception if the SMS cannot be sent
      */
+=======
+    /** static method to generate code for phone verification */
+>>>>>>> origin/main
     public static function generateSmsVerificationFor($subject, $for = 'phone_verification', array $options = [])
     {
         $expireAfter                  = data_get($options, 'expireAfter');

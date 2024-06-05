@@ -65,9 +65,12 @@ class Auth extends Authentication
                 session(['is_admin' => $user->isAdmin()]);
             }
 
+<<<<<<< HEAD
             // track last usage of api credential
             $apiCredential->trackLastUsed();
 
+=======
+>>>>>>> origin/main
             return true;
         }
 

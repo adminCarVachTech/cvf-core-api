@@ -11,7 +11,10 @@ use Fleetbase\Traits\HasUuid;
 use Fleetbase\Traits\SendsWebhooks;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+<<<<<<< HEAD
 use Illuminate\Support\Collection;
+=======
+>>>>>>> origin/main
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Mimey\MimeTypes;
@@ -418,6 +421,7 @@ class File extends Model
 
         return static::randomFileName($extension);
     }
+<<<<<<< HEAD
 
     /**
      * Retrieves a collection of files based on UUIDs provided via a request.
@@ -439,4 +443,6 @@ class File extends Model
 
         return static::whereIn('uuid', $ids)->get();
     }
+=======
+>>>>>>> origin/main
 }
