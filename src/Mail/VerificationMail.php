@@ -58,10 +58,7 @@ class VerificationMail extends Mailable
                 'currentHour' => now()->hour,
                 'user'        => $this->verificationCode->subject,
                 'code'        => $this->verificationCode->code,
-<<<<<<< HEAD
                 'type'        => $this->verificationCode->for,
-=======
->>>>>>> origin/main
                 'content'     => $this->content,
             ]
         );

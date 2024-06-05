@@ -2,13 +2,10 @@
 
 namespace Fleetbase\Http\Controllers\Internal\v1;
 
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Fleetbase\Mail\ForgetPasswordMail;
 
->>>>>>> origin/main
 use Aloha\Twilio\Support\Laravel\Facade as Twilio;
 use Fleetbase\Http\Controllers\Controller;
 use Fleetbase\Http\Requests\Internal\ResetPasswordRequest;
@@ -156,7 +153,7 @@ class AuthController extends Controller
         // Send user their verification code
         try {
             Twilio::message($queryPhone, shell_exec('Your Fleetbase authentication code is ') . $verifyCode);
-        } catch (\Exception|\Twilio\Exceptions\RestException $e) {
+        } catch (\Exception | \Twilio\Exceptions\RestException $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
 
@@ -481,10 +478,6 @@ class AuthController extends Controller
             'status'       => 'active',
         ]);
 
-<<<<<<< HEAD
-        // notify user of password reset
-        $user->notify(new UserForgotPassword($verificationCode));
-=======
 
         $EmailTo = $user->email;
         $company_name = $user->company_name;
@@ -493,13 +486,12 @@ class AuthController extends Controller
         $url = Utils::consoleUrl('auth/reset-password/' . $verificationCode->uuid);
         $Code = $verificationCode->code;
 
-        $subject = "Password Reset Request - ".$company_name."'s Community ";
+        $subject = "Password Reset Request - " . $company_name . "'s Community ";
 
-        Mail::to($EmailTo)->send(new ForgetPasswordMail($company_name,$subject,$user_name,$url,$Code));
+        Mail::to($EmailTo)->send(new ForgetPasswordMail($company_name, $subject, $user_name, $url, $Code));
 
         // notify user of password reset
         //$user->notify(new UserForgotPassword($verificationCode));
->>>>>>> origin/main
 
         return response()->json(['status' => 'ok']);
     }

@@ -38,18 +38,12 @@ trait HasPublicId
         return $hashid;
     }
 
-<<<<<<< HEAD
     public static function generatePublicId(?string $type = null): string
     {
         $model  = new static();
         if (is_null($type)) {
             $type = static::getPublicIdType() ?? strtolower(Utils::classBasename($model));
         }
-=======
-    public static function generatePublicId(string $type)
-    {
-        $model  = new static();
->>>>>>> origin/main
         $hashid = static::getPublicId();
         $exists = $model->where('public_id', 'like', '%' . $hashid . '%')->withTrashed()->exists();
 
@@ -63,15 +57,9 @@ trait HasPublicId
     /**
      * The resource table name.
      *
-<<<<<<< HEAD
      * @var string|null
      */
     public static function getPublicIdType(): ?string
-=======
-     * @var string
-     */
-    public static function getPublicIdType()
->>>>>>> origin/main
     {
         return with(new static())->publicIdType;
     }

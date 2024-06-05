@@ -2,13 +2,10 @@
 
 namespace Fleetbase\Http\Controllers\Internal\v1;
 
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Fleetbase\Mail\InvitationMail;
 
->>>>>>> origin/main
 use Fleetbase\Events\UserRemovedFromCompany;
 use Fleetbase\Exceptions\FleetbaseRequestValidationException;
 use Fleetbase\Exports\UserExport;
@@ -54,23 +51,20 @@ class UserController extends FleetbaseController
     {
         // @todo Add user creation validation
         try {
-<<<<<<< HEAD
-=======
 
             $email = $request->input('user.email');
             $companyUuid = session('company');
 
             // Check if the user already exists in the current company
             $existingUser = User::where('email', $email)
-                                ->where('company_uuid', $companyUuid)
-                                ->first();
+                ->where('company_uuid', $companyUuid)
+                ->first();
 
             if ($existingUser) {
                 //return response()->json(['error' => 'User already exists in the current company.'], 409);
-                throw new FleetbaseRequestValidationException(['email' => 'User already exists in the current company.'],'User already exists in this organization');
+                throw new FleetbaseRequestValidationException(['email' => 'User already exists in the current company.'], 'User already exists in this organization');
             }
 
->>>>>>> origin/main
             $record = $this->model->createRecordFromRequest($request, function (&$request, &$input) {
                 // Get user properties
                 $name        = $request->input('user.name');
@@ -96,32 +90,29 @@ class UserController extends FleetbaseController
                 $user->assignCompany($company);
             });
 
-<<<<<<< HEAD
-=======
             $invitation = Invite::create([
-            'company_uuid'    => session('record'),
-            'created_by_uuid' => session('user'),
-            'subject_uuid'    => $record->uuid,
-            'subject_type'    => Utils::getMutationType($record),
-            'protocol'        => 'email',
-            'recipients'      => [$record->email],
-            'reason'          => 'join_company',
-        ]);
+                'company_uuid'    => session('record'),
+                'created_by_uuid' => session('user'),
+                'subject_uuid'    => $record->uuid,
+                'subject_type'    => Utils::getMutationType($record),
+                'protocol'        => 'email',
+                'recipients'      => [$record->email],
+                'reason'          => 'join_company',
+            ]);
 
-        // notify user
-        //$user->notify(new UserInvited($invitation));
+            // notify user
+            //$user->notify(new UserInvited($invitation));
 
-        //Log::info("code: ".$invitation);
-        $EmailTo = $invitation->recipients[0];
-        $company_name = $record->company_name;
-        $user_name = $record->name;
-        $url = Utils::consoleUrl('join/org/' . $invitation->uri);
-        $Code = $invitation->code;
+            //Log::info("code: ".$invitation);
+            $EmailTo = $invitation->recipients[0];
+            $company_name = $record->company_name;
+            $user_name = $record->name;
+            $url = Utils::consoleUrl('join/org/' . $invitation->uri);
+            $Code = $invitation->code;
 
-        $subject = "You're Invited to Join ".$company_name."'s Community ";
+            $subject = "You're Invited to Join " . $company_name . "'s Community ";
 
-        Mail::to($EmailTo)->send(new InvitationMail($company_name,$subject,$user_name,$url,$Code));
->>>>>>> origin/main
+            Mail::to($EmailTo)->send(new InvitationMail($company_name, $subject, $user_name, $url, $Code));
             return ['user' => new $this->resource($record)];
         } catch (\Exception $e) {
             return response()->error($e->getMessage());
@@ -268,9 +259,6 @@ class UserController extends FleetbaseController
         ]);
 
         // notify user
-<<<<<<< HEAD
-        $user->notify(new UserInvited($invitation));
-=======
         //$user->notify(new UserInvited($invitation));
 
         //Log::info("code: ".$invitation);
@@ -281,10 +269,9 @@ class UserController extends FleetbaseController
         $url = Utils::consoleUrl('join/org/' . $invitation->uri);
         $Code = $invitation->code;
 
-        $subject = "You're Invited to Join ".$company_name."'s Community ";
+        $subject = "You're Invited to Join " . $company_name . "'s Community ";
 
-        Mail::to($EmailTo)->send(new InvitationMail($company_name,$subject,$user_name,$url,$Code));
->>>>>>> origin/main
+        Mail::to($EmailTo)->send(new InvitationMail($company_name, $subject, $user_name, $url, $Code));
 
         return response()->json(['status' => 'ok']);
     }
@@ -298,10 +285,6 @@ class UserController extends FleetbaseController
     {
         $invite = Invite::where('code', $request->input('code'))->with(['subject'])->first();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
         // get invited email
         $email = Arr::first($invite->recipients);
 
@@ -325,45 +308,29 @@ class UserController extends FleetbaseController
 
         // determine if user needs to set password (when status pending)
         $isPending = $needsPassword = $user->status === 'pending';
-<<<<<<< HEAD
-
         // add user to company
-        CompanyUser::create([
-            'user_uuid'    => $user->uuid,
-            'company_uuid' => $company->uuid,
-        ]);
-=======
-        // add user to company
-       /* CompanyUser::create([
+        /* CompanyUser::create([
             'user_uuid'    => $user->uuid,
             'company_uuid' => $company->uuid,
         ]);*/
->>>>>>> origin/main
 
         // activate user
         if ($isPending) {
             $user->update(['status' => 'active', 'email_verified_at' => Carbon::now()]);
         }
-<<<<<<< HEAD
 
-        // create authentication token for user
-        $token = $user->createToken($invite->code);
-
-=======
-        
         // create authentication token for user
         $token = $user->createToken($invite->code);
 
         $companyUser = CompanyUser::where('user_uuid', $user->uuid)
-                              ->where('company_uuid', $user->company_uuid)
-                              ->first();
-        
+            ->where('company_uuid', $user->company_uuid)
+            ->first();
+
         if ($companyUser) {
-        // activate company user
-        $companyUser->update(['status' => 'active']);
+            // activate company user
+            $companyUser->update(['status' => 'active']);
         }
-    
->>>>>>> origin/main
+
         // Notify company that user has accepted their invite
         NotificationRegistry::notify(UserAcceptedCompanyInvite::class, $company, $user);
 

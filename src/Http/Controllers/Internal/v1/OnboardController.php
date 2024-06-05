@@ -75,19 +75,11 @@ class OnboardController extends Controller
         $user->assignCompany($company);
 
         // create company user
-<<<<<<< HEAD
-        CompanyUser::create([
-            'user_uuid'    => $user->uuid,
-            'company_uuid' => $company->uuid,
-            'status'       => 'active',
-        ]);
-=======
         /*CompanyUser::create([
             'user_uuid'    => $user->uuid,
             'company_uuid' => $company->uuid,
             'status'       => 'active',
         ]);*/
->>>>>>> origin/main
 
         // send account created event
         event(new AccountCreated($user, $company));

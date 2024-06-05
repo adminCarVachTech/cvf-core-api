@@ -190,11 +190,7 @@ Route::prefix(config('fleetbase.api.routing.prefix', '/'))->namespace('Fleetbase
                                 $router->fleetbaseRoutes(
                                     'two-fa',
                                     function ($router, $controller) {
-<<<<<<< HEAD
                                         $router->post('config', $controller('saveSystemConfig'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
-=======
-                                        $router->post('config', $controller('saveSystemConfig'));
->>>>>>> origin/main
                                         $router->get('config', $controller('getSystemConfig'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
                                         $router->get('enforce', $controller('shouldEnforce'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
                                     }
@@ -212,21 +208,14 @@ Route::prefix(config('fleetbase.api.routing.prefix', '/'))->namespace('Fleetbase
                                 $router->fleetbaseRoutes('companies', function ($router, $controller) {
                                     $router->get('two-fa', $controller('getTwoFactorSettings'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
                                     $router->post('two-fa', $controller('saveTwoFactorSettings'));
-<<<<<<< HEAD
                                     $router->match(['get', 'post'], 'export', $controller('export'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
-=======
->>>>>>> origin/main
                                     $router->get('{id}/users', $controller('users'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
                                 })->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
                                 $router->fleetbaseRoutes(
                                     'users',
                                     function ($router, $controller) {
                                         $router->get('me', $controller('current'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
-<<<<<<< HEAD
                                         $router->match(['get', 'post'], 'export', $controller('export'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
-=======
-                                        $router->get('export', $controller('export'))->middleware([Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class]);
->>>>>>> origin/main
                                         $router->patch('deactivate/{id}', $controller('deactivate'));
                                         $router->patch('activate/{id}', $controller('activate'));
                                         $router->delete('remove-from-company/{id}', $controller('removeFromCompany'));
