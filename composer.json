@@ -1,22 +1,8 @@
 {
-    "name": "rohit0814/core-api",
-    "version": "0.0.8",
+    "name": "cvf/core-api",
+    "version": "1.0.0",
     "description": "Core Framework and Resources for Fleetbase API",
-    "keywords": [
-        "fleetbase",
-        "logistics platform"
-    ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Fleetbase Pte Ltd.",
-            "email": "hello@fleetbase.io"
-        },
-        {
-            "name": "Ronald A. Richardson",
-            "email": "ron@fleetbase.io"
-        }
-    ],
     "require": {
         "php": "^8.0",
         "aloha/twilio": "^5.0",
