@@ -21,7 +21,7 @@ class EmailDomainExcluded implements Rule
     public function __construct()
     {
         // Load the list of disposable email domains from a file and flip the array to use the domains as keys
-        $this->domains = array_flip(file(base_path('vendor/rohit0814/core-api/storage/disposable_emails.txt'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        $this->domains = array_flip(file(base_path('vendor/cvf/core-api/storage/disposable_emails.txt'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
     }
 
     /**
